@@ -4,6 +4,8 @@
 #include "ofxOpenCv.h"
 
 class testApp : public ofBaseApp{
+    
+//    time to start monkeying around...
 
 	public:
 		void setup();
