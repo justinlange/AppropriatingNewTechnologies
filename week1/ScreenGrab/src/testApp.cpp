@@ -47,14 +47,20 @@ void testApp::update(){
 		//tex.readToPixels(pixels);
 		//image = pixels;
 		image.setFromPixels(data, captureWidth, captureHeight, OF_IMAGE_COLOR_ALPHA, true);
-		image.setImageType(OF_IMAGE_COLOR);
+		image.setImageType(OF_IMAGE_GRAYSCALE);
+        image.getPixels(captureWidth,captureHeight);
+        image.rotate90(90);
+        
+
 		image.update();
 		finder.findHaarObjects(image.getPixelsRef());
 		
 	}
 	//cout << imageBelowWindow()[0] << endl;
 	
+
 	
+    
 
 }
 
@@ -68,8 +74,12 @@ void testApp::draw(){
     //#2
 	for(int i = 0; i < finder.blobs.size(); i++) {
 		ofRect(finder.blobs[i].boundingRect);
-	}
+    }
+
 	
+    
+    
+    
 }
 
 //--------------------------------------------------------------
