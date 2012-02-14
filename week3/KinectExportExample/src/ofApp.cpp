@@ -1,17 +1,31 @@
 #include "ofApp.h"
 
+#include <string>
+#include <sstream>
+
 //gives you an image in the rgb+alpha format in png
+
+bool recordingOn = false;
+int frameNumber = 0;
+ostringstream fileNameToSave;
 
 void ofApp::setup() {
 	kinect.init();
 	kinect.setRegistration(true);
 	kinect.open();
+    
 }
 
 void ofApp::update() {
-	kinect.update();
-	if(kinect.isFrameNew()) {
-		if(ofGetKeyPressed(' ')) {
+	
+    kinect.update();
+    if(ofGetKeyPressed(' ')) {
+        recordingOn =! recordingOn;
+    }
+
+    
+	if(kinect.isFrameNew()) { 
+        if (recordingOn == true && frameNumber <= 60) {
 			ofPixels& depthPixels = kinect.getDepthPixelsRef();
 			ofPixels& colorPixels = kinect.getPixelsRef();
 			ofImage img;
@@ -21,11 +35,16 @@ void ofApp::update() {
 					ofColor color = colorPixels.getColor(x, y);
 					ofColor depth = depthPixels.getColor(x, y);
 					img.setColor(x, y, ofColor(color, depth.getBrightness()));
+
 				}
 			}
-			img.saveImage("out.png");
+            frameNumber = frameNumber + 1;
+            ostringstream fileNameToSave;
+            fileNameToSave << frameNumber << ".png";
+            string result = fileNameToSave.str();
+			img.saveImage(result);
 		}
-	}
+    }
 }
 
 void ofApp::draw() {
@@ -33,6 +52,7 @@ void ofApp::draw() {
 	ofSetColor(255, 255, 255);
 	kinect.drawDepth(0, 0, 640, 480);
 	kinect.draw(0, 480, 640, 480);
+
 }
 
 void ofApp::exit() {

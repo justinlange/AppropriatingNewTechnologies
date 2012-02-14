@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxKinect.h"
 
+
 class ofApp : public ofBaseApp {
 public:
 	
