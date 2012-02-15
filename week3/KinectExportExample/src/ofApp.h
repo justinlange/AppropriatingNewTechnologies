@@ -13,4 +13,6 @@ public:
 	void exit();
 	
 	ofxKinect kinect;
+    ofImage img;
+
 };

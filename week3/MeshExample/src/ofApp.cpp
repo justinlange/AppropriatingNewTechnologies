@@ -2,6 +2,14 @@
 
 //just loading in mesh this time
 
+int currentFrame = 1;
+int previousFrame = 0;
+string frameResult;
+int skip;	
+int width;
+int height;
+
+
 void addFace(ofMesh& mesh, ofVec3f a, ofVec3f b, ofVec3f c) {
 	mesh.addVertex(a);
 	mesh.addVertex(b);
@@ -25,37 +33,67 @@ ofVec3f getVertexFromImg(ofImage& img, int x, int y) {
 
 void ofApp::setup() {
 	ofSetVerticalSync(true);
-	ofImage img;
-	img.loadImage("linzer.png");
+	img.loadImage("1.png");
 	
 	mesh.setMode(OF_PRIMITIVE_TRIANGLES); //rather than points
-	int skip = 5;	
-	int width = img.getWidth();
-	int height = img.getHeight();
+    skip = 5;	
+	width = img.getWidth();
+	height = img.getHeight();
 	ofVec3f zero(0, 0, 0);
-	for(int y = 0; y < height - skip; y += skip) {
-        // we need to skip so that the wireframe actually shows something
-        
-		for(int x = 0; x < width - skip; x += skip) {
-            
-            // this is kind of like quadrants
-            
-			ofVec3f nw = getVertexFromImg(img, x, y);
-			ofVec3f ne = getVertexFromImg(img, x + skip, y);
-			ofVec3f sw = getVertexFromImg(img, x, y + skip);
-			ofVec3f se = getVertexFromImg(img, x + skip, y + skip);
-			if(nw != zero && ne != zero && sw != zero && se != zero) {  //this line checks for bad data
-				addFace(mesh, nw, ne, se, sw); //so long as nothing is zero.... otherwise vertices point to front of screen
-                
-			}
-		}
-	}
+
 	
 	// even points can overlap with each other, let's avoid that
 	glEnable(GL_DEPTH_TEST);  //don't really notice, because we're in wireframe
 }
 
 void ofApp::update() {
+    
+    
+    
+     //if space bar is pressed, increment playback number
+     
+    if(ofGetKeyPressed('p')) {
+        skip++;
+    }
+    if(ofGetKeyPressed('o') && skip >= 1) {
+        skip--;
+    }
+
+    
+     if(ofGetKeyPressed(' ')) {
+         if(currentFrame < 42){
+             currentFrame++;
+         }else{
+             currentFrame = 1;
+         }
+         
+     ostringstream fileNameToSave;
+     fileNameToSave << currentFrame << ".png";
+         frameResult = fileNameToSave.str(); 
+         img.loadImage(frameResult);
+         mesh.clear();
+         
+         for(int y = 0; y < height - skip; y += skip) {
+             // we need to skip so that the wireframe actually shows something
+             
+             for(int x = 0; x < width - skip; x += skip) {
+                 
+                 // this is kind of like quadrants
+                 
+                 ofVec3f nw = getVertexFromImg(img, x, y);
+                 ofVec3f ne = getVertexFromImg(img, x + skip, y);
+                 ofVec3f sw = getVertexFromImg(img, x, y + skip);
+                 ofVec3f se = getVertexFromImg(img, x + skip, y + skip);
+                 if(nw != 0 && ne != 0 && sw != 0 && se != 0) {  //this line checks for bad data
+                     addFace(mesh, nw, ne, se, sw); //so long as nothing is zero.... otherwise vertices point to front of screen
+                     
+                 }
+             }
+         }
+
+     }
+     
+
 	
 }
 

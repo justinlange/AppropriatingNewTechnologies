@@ -10,4 +10,6 @@ public:
 	
 	ofEasyCam cam;
 	ofMesh mesh;
+    ofImage img;    
+
 };

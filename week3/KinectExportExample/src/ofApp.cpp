@@ -10,9 +10,13 @@ int frameNumber = 0;
 ostringstream fileNameToSave;
 
 void ofApp::setup() {
-	kinect.init();
+    kinect.init();
 	kinect.setRegistration(true);
 	kinect.open();
+    
+//    ofImage_::ofImage(const ofPixels_< PixelType > &pix)
+//    img.allocate(640, 480, OF_IMAGE_COLOR_ALPHA);
+
     
 }
 
@@ -28,8 +32,6 @@ void ofApp::update() {
         if (recordingOn == true && frameNumber <= 60) {
 			ofPixels& depthPixels = kinect.getDepthPixelsRef();
 			ofPixels& colorPixels = kinect.getPixelsRef();
-			ofImage img;
-			img.allocate(640, 480, OF_IMAGE_COLOR_ALPHA);
 			for(int y = 0; y < 480; y++) {
 				for(int x = 0; x < 640; x++) {
 					ofColor color = colorPixels.getColor(x, y);
@@ -48,10 +50,12 @@ void ofApp::update() {
 }
 
 void ofApp::draw() {
+    
 	ofBackground(0);
 	ofSetColor(255, 255, 255);
 	kinect.drawDepth(0, 0, 640, 480);
 	kinect.draw(0, 480, 640, 480);
+    
 
 }
 
